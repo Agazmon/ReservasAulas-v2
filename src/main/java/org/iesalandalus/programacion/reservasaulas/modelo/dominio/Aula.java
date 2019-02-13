@@ -1,10 +1,15 @@
 package org.iesalandalus.programacion.reservasaulas.modelo.dominio;
 
 public class Aula {
+	private static final float PUNTOS_POR_PUESTO = (float) 0.5;
+	private int MIN_PUESTOS = 10;
+	private int MAX_PUESTOS = 100;
 	private String nombre;
+	private int puestos = 0;
 
-	public Aula(String aula) {
+	public Aula(String aula, int puestos) {
 		setNombre(aula);
+		setPuestos(puestos);
 	}
 
 	public Aula(Aula aula) {
@@ -12,6 +17,7 @@ public class Aula {
 			throw new IllegalArgumentException("No se puede copiar un aula nula.");
 		}
 		setNombre(aula.nombre);
+		setPuestos(aula.puestos);
 	}
 
 	private void setNombre(String nombre) {
@@ -26,6 +32,23 @@ public class Aula {
 
 	public String getNombre() {
 		return new String(this.nombre);
+	}
+
+	private void setPuestos(int puestos) {
+		if (puestos < MIN_PUESTOS | puestos > MAX_PUESTOS) {
+			throw new IllegalArgumentException("El número de puestos no es correcto.");
+		} else {
+			this.puestos = puestos;
+		}
+	}
+
+	public int getPuestos() {
+		return this.puestos;
+	}
+
+	public float getPuntos() {
+		return (puestos * PUNTOS_POR_PUESTO);
+
 	}
 
 	@Override
@@ -55,7 +78,7 @@ public class Aula {
 
 	@Override
 	public String toString() {
-		return "[nombre=" + nombre + "]";
+		return "[nombre=" + nombre + ", puestos=" + puestos + "]";
 	}
 
 }
