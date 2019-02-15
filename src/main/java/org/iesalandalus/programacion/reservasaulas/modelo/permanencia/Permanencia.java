@@ -35,7 +35,7 @@ abstract class Permanencia {
 	}
 
 	protected void setDia(String cadenaPermanencia) {
-		if (cadenaPermanencia == null | cadenaPermanencia.trim().equals("")) {
+		if (cadenaPermanencia == null || cadenaPermanencia.trim().equals("")) {
 			throw new IllegalArgumentException("Fecha pasada no válida");
 		} else {
 			this.dia = LocalDate.parse(cadenaPermanencia, FORMATO_DIA);
@@ -48,6 +48,6 @@ abstract class Permanencia {
 
 	public abstract int hashCode();
 
-	public abstract boolean equals();
+	public abstract boolean equals(Object obj);
 
 }
