@@ -3,8 +3,6 @@ package org.iesalandalus.programacion.reservasaulas.modelo.permanencia;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-import org.omg.CORBA.TRANSACTION_MODE;
-
 abstract class Permanencia {
 	protected LocalDate dia;
 	protected static final DateTimeFormatter FORMATO_DIA = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -44,12 +42,12 @@ abstract class Permanencia {
 		}
 	}
 
-	abstract public int getPuntos();
+	public abstract int getPuntos();
 
-	abstract public String toString();
+	public abstract String toString();
 
-	abstract public int hashCode();
+	public abstract int hashCode();
 
-	abstract public boolean equals();
+	public abstract boolean equals();
 
 }
