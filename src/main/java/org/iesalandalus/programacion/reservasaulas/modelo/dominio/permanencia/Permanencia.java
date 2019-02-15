@@ -44,7 +44,7 @@ abstract class Permanencia {
 		} else {
 			try {
 				this.dia = LocalDate.parse(cadenaPermanencia, FORMATO_DIA);
-			} catch (Exception e) {
+			} catch (DateTimeParseException e) {
 				throw new IllegalArgumentException("El formato del día de la permanencia no es correcto.");
 			}
 		}
