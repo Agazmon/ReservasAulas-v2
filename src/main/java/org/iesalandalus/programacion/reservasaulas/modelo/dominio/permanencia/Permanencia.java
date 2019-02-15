@@ -12,7 +12,7 @@ abstract class Permanencia {
 
 	}
 
-	protected Permanencia(LocalDate fechaPasada) throws IllegalArgumentException{
+	protected Permanencia(LocalDate fechaPasada){
 		setDia(fechaPasada);
 	}
 
