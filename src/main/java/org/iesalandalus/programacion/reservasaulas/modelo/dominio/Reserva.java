@@ -1,6 +1,6 @@
 package org.iesalandalus.programacion.reservasaulas.modelo.dominio;
 
-import org.iesalandalus.programacion.reservasaulas.modelo.permanencia.Permanencia;
+import org.iesalandalus.programacion.reservasaulas.modelo.dominio.permanencia.Permanencia;
 
 public class Reserva {
 	private Profesor profesor;

@@ -1,7 +1,8 @@
-package org.iesalandalus.programacion.reservasaulas.modelo.permanencia;
+package org.iesalandalus.programacion.reservasaulas.modelo.dominio.permanencia;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 abstract class Permanencia {
 	protected LocalDate dia;
@@ -11,15 +12,18 @@ abstract class Permanencia {
 
 	}
 
-	protected Permanencia(LocalDate fechaPasada) {
+	protected Permanencia(LocalDate fechaPasada) throws IllegalArgumentException{
 		setDia(fechaPasada);
 	}
 
 	protected Permanencia(String cadenaPermanencia) {
 		if (cadenaPermanencia == null) {
-			throw new IllegalArgumentException("No se puede copiar una permanencia nula.");
+			throw new IllegalArgumentException("El día de una permanencia no puede ser nulo.");
+		} else if (cadenaPermanencia.trim().equals("")) {
+			throw new IllegalArgumentException("La cadena no puede ser vacia");
+		} else {
+			setDia(cadenaPermanencia);
 		}
-		setDia(cadenaPermanencia);
 	}
 
 	public LocalDate getDia() {
@@ -30,7 +34,7 @@ abstract class Permanencia {
 		if (diaPasado == null) {
 			throw new IllegalArgumentException("El día de una permanencia no puede ser nulo.");
 		} else {
-			dia = diaPasado;
+				this.dia = diaPasado;
 		}
 	}
 
@@ -38,7 +42,11 @@ abstract class Permanencia {
 		if (cadenaPermanencia == null || cadenaPermanencia.trim().equals("")) {
 			throw new IllegalArgumentException("Fecha pasada no válida");
 		} else {
-			this.dia = LocalDate.parse(cadenaPermanencia, FORMATO_DIA);
+			try {
+				this.dia = LocalDate.parse(cadenaPermanencia, FORMATO_DIA);
+			} catch (Exception e) {
+				throw new IllegalArgumentException("El formato del día de la permanencia no es correcto.");
+			}
 		}
 	}
 

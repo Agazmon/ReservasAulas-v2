@@ -7,7 +7,7 @@ import org.iesalandalus.programacion.reservasaulas.modelo.ModeloReservasAulas;
 import org.iesalandalus.programacion.reservasaulas.modelo.dominio.Aula;
 import org.iesalandalus.programacion.reservasaulas.modelo.dominio.Profesor;
 import org.iesalandalus.programacion.reservasaulas.modelo.dominio.Reserva;
-import org.iesalandalus.programacion.reservasaulas.modelo.permanencia.Permanencia;
+import org.iesalandalus.programacion.reservasaulas.modelo.dominio.permanencia.Permanencia;
 
 public class IUTextual {
 	private ModeloReservasAulas modelo;
