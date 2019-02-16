@@ -31,7 +31,7 @@ public class Aula {
 	}
 
 	public String getNombre() {
-		return new String(this.nombre);
+		return this.nombre;
 	}
 
 	private void setPuestos(int puestos) {
