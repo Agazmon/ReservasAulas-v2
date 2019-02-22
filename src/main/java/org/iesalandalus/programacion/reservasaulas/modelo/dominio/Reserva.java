@@ -1,5 +1,7 @@
 package org.iesalandalus.programacion.reservasaulas.modelo.dominio;
 
+import java.util.Objects;
+
 import org.iesalandalus.programacion.reservasaulas.modelo.dominio.permanencia.*;
 
 public class Reserva {
@@ -69,35 +71,26 @@ public class Reserva {
 	public float getPuntos() {
 		return permanencia.getPuntos()+aula.getPuntos();
 	}
+	
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((aula == null) ? 0 : aula.hashCode());
-		result = prime * result + ((permanencia == null) ? 0 : permanencia.hashCode());
-		return result;
+		return Objects.hash(aula, permanencia, profesor);
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (!(obj instanceof Reserva)) {
 			return false;
+		}
 		Reserva other = (Reserva) obj;
-		if (aula == null) {
-			if (other.aula != null)
-				return false;
-		} else if (!aula.equals(other.aula))
-			return false;
-		if (permanencia == null) {
-			if (other.permanencia != null)
-				return false;
-		} else if (!permanencia.equals(other.permanencia))
-			return false;
-		return true;
+		return Objects.equals(aula, other.aula) && Objects.equals(permanencia, other.permanencia)
+				&& Objects.equals(profesor, other.profesor);
 	}
 
 	@Override
