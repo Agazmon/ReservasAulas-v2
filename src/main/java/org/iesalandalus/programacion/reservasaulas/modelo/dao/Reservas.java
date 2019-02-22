@@ -1,5 +1,6 @@
 package org.iesalandalus.programacion.reservasaulas.modelo.dao;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,10 +10,13 @@ import org.iesalandalus.programacion.reservasaulas.modelo.dominio.Aula;
 import org.iesalandalus.programacion.reservasaulas.modelo.dominio.Profesor;
 import org.iesalandalus.programacion.reservasaulas.modelo.dominio.Reserva;
 import org.iesalandalus.programacion.reservasaulas.modelo.dominio.permanencia.Permanencia;
+import org.iesalandalus.programacion.reservasaulas.modelo.dominio.permanencia.PermanenciaPorHora;
+import org.iesalandalus.programacion.reservasaulas.modelo.dominio.permanencia.PermanenciaPorTramo;
 
 public class Reservas {
 
 	private List<Reserva> coleccionReservas;
+	private float MAX_PUNTOS_PROFESOR_MES = 200.00f;
 
 	public Reservas() {
 		coleccionReservas = new ArrayList<>();
@@ -48,11 +52,71 @@ public class Reservas {
 	public void insertar(Reserva reserva) throws OperationNotSupportedException {
 		if (reserva == null) {
 			throw new IllegalArgumentException("No se puede realizar una reserva nula.");
-		} else if (coleccionReservas.contains(reserva)) {
+		}
+		if (esMesSiguienteOPosterior(reserva)) {
+			throw new OperationNotSupportedException("Sólo se pueden hacer reservas para el mes que viene o posteriores.");
+		}
+		if(getPuntosGastadosReserva(reserva)>MAX_PUNTOS_PROFESOR_MES) {
+			throw new OperationNotSupportedException("Esta reserva excede los puntos máximos por mes para dicho profesor.");
+		}
+		if (this.coleccionReservas.contains(reserva)) {
 			throw new OperationNotSupportedException("La reserva ya existe.");
 		} else {
-			coleccionReservas.add(new Reserva(reserva));
+			if (getReservaDia(reserva.getPermanencia().getDia())==null) {
+					coleccionReservas.add(new Reserva(reserva));
+			} else{
+				if (getReservaDia(reserva.getPermanencia().getDia()).getPermanencia() instanceof PermanenciaPorTramo & reserva.getPermanencia() instanceof PermanenciaPorTramo) {
+						coleccionReservas.add(new Reserva(reserva));
+				} else {
+					if (getReservaDia(reserva.getPermanencia().getDia()).getPermanencia() instanceof PermanenciaPorHora & reserva.getPermanencia() instanceof PermanenciaPorHora) {
+							coleccionReservas.add(new Reserva(reserva));
+					} else {
+						if (getReservaDia(reserva.getPermanencia().getDia()).getPermanencia() instanceof PermanenciaPorHora) {
+							throw new OperationNotSupportedException("Ya se ha realizado una reserva por hora para este día y aula.");
+						} else {
+							throw new OperationNotSupportedException("Ya se ha realizado una reserva por tramo para este día y aula.");
+						}
+					}
+				}
+			}
+	}
+}	
+
+	private boolean esMesSiguienteOPosterior(Reserva reserva) {
+		if (reserva.getPermanencia().getDia().getMonthValue()==(LocalDate.now().getMonthValue())) {
+			return true;
+		} else {
+			return false;
 		}
+	}
+
+	private float getPuntosGastadosReserva(Reserva reserva) {
+		float totalPuntos = 0;
+		for (Reserva puntosReservas : getReservasProfesorMes(reserva.getProfesor(),reserva.getPermanencia().getDia())){
+			totalPuntos+=puntosReservas.getPuntos();
+		}
+		return totalPuntos+reserva.getPuntos();
+	}
+
+	private List<Reserva> getReservasProfesorMes(Profesor profesor, LocalDate fecha) {
+		List<Reserva> reservasProfesor = new ArrayList<>();
+		for (Reserva reserva : coleccionReservas) {
+			if (reserva.getProfesor().equals(profesor)
+					& reserva.getPermanencia().getDia().getMonthValue()==fecha.getMonthValue()) {
+				reservasProfesor.add(new Reserva(reserva));
+			}
+		}
+		return reservasProfesor;
+	}
+
+	private Reserva getReservaDia(LocalDate fecha) {
+		for (Reserva reserva : coleccionReservas) {
+			if (reserva.getPermanencia().getDia().equals(fecha)) {
+				return new Reserva(reserva);
+			}
+		}
+		return null;
+
 	}
 
 	public Reserva buscar(Reserva reserva) {
@@ -118,14 +182,25 @@ public class Reservas {
 		if (permanencia == null) {
 			throw new IllegalArgumentException("No se puede consultar la disponibilidad de una permanencia nula.");
 		}
-
-		Profesor profesorConsulta = new Profesor("Profesor", "correo@correo.com");
-		Reserva reservaConsulta = new Reserva(profesorConsulta, aula, permanencia);
-		for (Reserva reserva : coleccionReservas) {
-			if (reserva.equals(reservaConsulta)) {
-				return false;
+		if (getReservaDia(permanencia.getDia())==null) {
+			return true;
+		} else {
+			Profesor profesorConsulta = new Profesor("Profesor", "correo@correo.com");
+			Reserva reservaConsulta = new Reserva(profesorConsulta, aula, permanencia);
+			if (coleccionReservas.contains(reservaConsulta)) {
+			for (Reserva reserva : coleccionReservas) {
+				if((reserva.getPermanencia() instanceof PermanenciaPorHora & getReservaDia(permanencia.getDia()).getPermanencia() instanceof PermanenciaPorHora) || (reserva.getPermanencia() instanceof PermanenciaPorTramo & getReservaDia(permanencia.getDia()).getPermanencia() instanceof PermanenciaPorTramo)) {
+					if (reserva.equals(reservaConsulta)) {
+						return false;
+					}
+				}
+				
 			}
+			return true;
 		}
-		return true;
+			else {
+				return true;
+			}
+		}	
 	}
 }
