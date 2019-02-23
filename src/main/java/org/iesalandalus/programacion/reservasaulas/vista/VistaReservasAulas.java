@@ -19,7 +19,7 @@ public class VistaReservasAulas implements IVistaReservasAulas {
 
 	public VistaReservasAulas() {
 		Opcion.setVista(this);
-		this.Controlador= new ControladorReservasAulas(this, new ModeloReservasAulas());
+		new ControladorReservasAulas(this, new ModeloReservasAulas());
 	}
 	/* (non-Javadoc)
 	 * @see org.iesalandalus.programacion.reservasaulas.vista.IVistaReservasAulas#setControlador(org.iesalandalus.programacion.reservasaulas.controlador.ControladorReservasAulas)
@@ -72,7 +72,7 @@ public class VistaReservasAulas implements IVistaReservasAulas {
 	public void borrarAula() {
 		Consola.mostrarCabecera("Borrar Aula");
 		try {
-			Aula aula = Consola.leerAula();
+			Aula aula = Controlador.buscarAula(new Aula(Consola.leerNombreAula(),15));
 			Controlador.borrarAula(aula);
 			System.out.println("El Aula ha sido borrada del sistema");
 		} catch (OperationNotSupportedException | IllegalArgumentException e) {
