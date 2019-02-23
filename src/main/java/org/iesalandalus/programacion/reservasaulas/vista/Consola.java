@@ -68,7 +68,6 @@ public class Consola {
 		telefono = Entrada.cadena();
 		if (telefono.trim().equals("")) {
 			Profesor profesor= new Profesor(nombre, correo);
-			System.out.println(profesor);
 			return new Profesor(profesor) ;
 		} else {
 			Profesor profesor = new Profesor(nombre, correo, telefono);
@@ -117,7 +116,7 @@ public class Consola {
 		int hora, minutos;
 		minutos = 00;
 		do {
-			System.out.print("Introduce una hora entre las 8 y las 22, la reserva se hará a en punto.");
+			System.out.print("Introduce una hora entre las 8 y las 22, la reserva se hará a en punto: ");
 			hora = Entrada.entero();
 		} while (hora<8 || hora>22);
 		return LocalTime.of(hora, minutos);
@@ -132,7 +131,7 @@ public class Consola {
 	public static int elegirPermanencia() {
 		int eleccion=0;
 		do {
-			System.out.print("Elige el tipo de permanencia, 1=Por Tramo ; 2=Por Hora");
+			System.out.print("Elige el tipo de permanencia, 1=Por Tramo ; 2=Por Hora: ");
 			eleccion=Entrada.entero();
 		} while (eleccion>2|eleccion<1);
 		return eleccion;

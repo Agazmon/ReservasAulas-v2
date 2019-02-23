@@ -21,16 +21,12 @@ public class VistaReservasAulas implements IVistaReservasAulas {
 		Opcion.setVista(this);
 		new ControladorReservasAulas(this, new ModeloReservasAulas());
 	}
-	/* (non-Javadoc)
-	 * @see org.iesalandalus.programacion.reservasaulas.vista.IVistaReservasAulas#setControlador(org.iesalandalus.programacion.reservasaulas.controlador.ControladorReservasAulas)
-	 */
+
 	@Override
 	public void setControlador(IControladorReservasAulas controlador){
 		this.Controlador = controlador;
 	}
-	/* (non-Javadoc)
-	 * @see org.iesalandalus.programacion.reservasaulas.vista.IVistaReservasAulas#comenzar()
-	 */
+
 	@Override
 	public void comenzar() {
 		int opcionEscogida;
@@ -42,17 +38,11 @@ public class VistaReservasAulas implements IVistaReservasAulas {
 		} while (opcionEscogida != Opcion.SALIR.ordinal());
 	}
 
-	/* (non-Javadoc)
-	 * @see org.iesalandalus.programacion.reservasaulas.vista.IVistaReservasAulas#salir()
-	 */
 	@Override
 	public void salir() {
 		System.out.print("Has salido del programa Reservas Aulas.");
 	}
 
-	/* (non-Javadoc)
-	 * @see org.iesalandalus.programacion.reservasaulas.vista.IVistaReservasAulas#insertarAula()
-	 */
 	@Override
 	public void insertarAula() {
 		Consola.mostrarCabecera("Insertar Aula");
@@ -65,9 +55,6 @@ public class VistaReservasAulas implements IVistaReservasAulas {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see org.iesalandalus.programacion.reservasaulas.vista.IVistaReservasAulas#borrarAula()
-	 */
 	@Override
 	public void borrarAula() {
 		Consola.mostrarCabecera("Borrar Aula");
@@ -80,14 +67,11 @@ public class VistaReservasAulas implements IVistaReservasAulas {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see org.iesalandalus.programacion.reservasaulas.vista.IVistaReservasAulas#buscarAula()
-	 */
 	@Override
 	public void buscarAula() {
 		Consola.mostrarCabecera("Buscar Aula");
 		try {
-			Aula aula = Controlador.buscarAula(Consola.leerAula());
+			Aula aula = Controlador.buscarAula(new Aula(Consola.leerNombreAula(),15));
 			if (aula != null) {
 				System.out.println("El aula encontrada es: " + aula);
 			} else {
@@ -98,9 +82,6 @@ public class VistaReservasAulas implements IVistaReservasAulas {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see org.iesalandalus.programacion.reservasaulas.vista.IVistaReservasAulas#listarAulas()
-	 */
 	@Override
 	public void listarAulas() {
 		Consola.mostrarCabecera("Listar Aulas");
@@ -115,15 +96,11 @@ public class VistaReservasAulas implements IVistaReservasAulas {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see org.iesalandalus.programacion.reservasaulas.vista.IVistaReservasAulas#insertarProfesor()
-	 */
 	@Override
 	public void insertarProfesor() {
 		Consola.mostrarCabecera("Insertar Profesor/a");
 		try {
 			Profesor profesor = Consola.leerProfesor();
-			System.out.println(profesor);
 			Controlador.insertarProfesor(profesor);
 			System.out.println("Profesor/a proporcionado/a ha sido añadido/a al sistema.");
 		} catch (OperationNotSupportedException | IllegalArgumentException e) {
@@ -131,39 +108,34 @@ public class VistaReservasAulas implements IVistaReservasAulas {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see org.iesalandalus.programacion.reservasaulas.vista.IVistaReservasAulas#borrarProfesor()
-	 */
 	@Override
 	public void borrarProfesor() {
 		Consola.mostrarCabecera("Borrar Profesor/a");
 		try {
 			Profesor profesorBorrar = Controlador.buscarProfesor(new Profesor(Consola.leerNombreProfesor(), CORREO_VALIDO));
 			Controlador.borrarProfesor(profesorBorrar);
-			System.out.println("Profesor/a proporcionado/a ha sido borrado/a del sistema");
+			System.out.println("Profesor/a proporcionado/a ha sido borrado/a del sistema.");
 		} catch (OperationNotSupportedException | IllegalArgumentException e) {
 			System.out.println(ERROR + e.getMessage());
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see org.iesalandalus.programacion.reservasaulas.vista.IVistaReservasAulas#buscarProfesor()
-	 */
 	@Override
 	public void buscarProfesor() {
 		Consola.mostrarCabecera("Buscar Profesor/a");
 		Profesor profesorEncontrado = Controlador.buscarProfesor(new Profesor(Consola.leerNombreProfesor(), CORREO_VALIDO));
-		if (profesorEncontrado != null) {
-			System.out.println(profesorEncontrado);
-		} else {
-			System.out.println("Profesor/a proporcionado/a no ha sido encontrado/a del sistema");
+		try {
+			if (profesorEncontrado != null) {
+				System.out.println(profesorEncontrado);
+			} else {
+				System.out.println("Profesor/a proporcionado/a no ha sido encontrado/a del sistema.");
+			}
+		} catch (IllegalArgumentException e) {
+			System.out.println(ERROR + e.getMessage());
 		}
 
 	}
 
-	/* (non-Javadoc)
-	 * @see org.iesalandalus.programacion.reservasaulas.vista.IVistaReservasAulas#listarProfesores()
-	 */
 	@Override
 	public void listarProfesores() {
 		Consola.mostrarCabecera("Listar Profesores");
@@ -178,9 +150,6 @@ public class VistaReservasAulas implements IVistaReservasAulas {
 
 	}
 
-	/* (non-Javadoc)
-	 * @see org.iesalandalus.programacion.reservasaulas.vista.IVistaReservasAulas#realizarReserva()
-	 */
 	@Override
 	public void realizarReserva() {
 		Consola.mostrarCabecera("Realizar Reserva");
@@ -194,7 +163,7 @@ public class VistaReservasAulas implements IVistaReservasAulas {
 				System.out.println("La reserva ha sido realizada y añadida al sistema.");
 				System.out.println("Los datos de la reserva son" + reserva.toString());
 			} else {
-				System.out.println("Ya hay una reserva realizada en este tramo");
+				System.out.println("Ya hay una reserva realizada en esa permanencia.");
 			}
 		} catch (OperationNotSupportedException | IllegalArgumentException e) {
 			System.out.println(ERROR + e.getMessage());
@@ -215,9 +184,6 @@ public class VistaReservasAulas implements IVistaReservasAulas {
 		return reservaLeida;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.iesalandalus.programacion.reservasaulas.vista.IVistaReservasAulas#anularReserva()
-	 */
 	@Override
 	public void anularReserva() {
 		Consola.mostrarCabecera("Anula Reserva");
@@ -234,9 +200,6 @@ public class VistaReservasAulas implements IVistaReservasAulas {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see org.iesalandalus.programacion.reservasaulas.vista.IVistaReservasAulas#listarReservas()
-	 */
 	@Override
 	public void listarReservas() {
 		Consola.mostrarCabecera("Listar Reservas");
@@ -247,7 +210,7 @@ public class VistaReservasAulas implements IVistaReservasAulas {
 					System.out.println(reserva);
 				}
 			} else {
-				System.out.println("No existen reservas para listar actualmente");
+				System.out.println("No existen reservas para listar actualmente.");
 			}
 		} catch (Exception e) {
 			System.out.println(ERROR + e.getMessage());
@@ -255,14 +218,11 @@ public class VistaReservasAulas implements IVistaReservasAulas {
 
 	}
 
-	/* (non-Javadoc)
-	 * @see org.iesalandalus.programacion.reservasaulas.vista.IVistaReservasAulas#listarReservasAula()
-	 */
 	@Override
 	public void listarReservasAula() {
 		Consola.mostrarCabecera("Listar Reservas por Aula");
 		try {
-			Aula reservasAula = new Aula(Consola.leerAula());
+			Aula reservasAula = Controlador.buscarAula(new Aula(Consola.leerNombreAula(),10));
 			List<Reserva> reservaAula = Controlador.getReservasAula(reservasAula);
 			if (reservaAula.size() > 0) {
 				for (Reserva reserva : reservaAula) {
@@ -277,9 +237,6 @@ public class VistaReservasAulas implements IVistaReservasAulas {
 
 	}
 
-	/* (non-Javadoc)
-	 * @see org.iesalandalus.programacion.reservasaulas.vista.IVistaReservasAulas#listarReservasProfesor()
-	 */
 	@Override
 	public void listarReservasProfesor() {
 		Consola.mostrarCabecera("Listar Reservas por Profesor");
@@ -301,9 +258,6 @@ public class VistaReservasAulas implements IVistaReservasAulas {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see org.iesalandalus.programacion.reservasaulas.vista.IVistaReservasAulas#listarReservasPermanencia()
-	 */
 	@Override
 	public void listarReservasPermanencia() {
 		Consola.mostrarCabecera("Listar Reservas por Permanencia");
@@ -323,9 +277,6 @@ public class VistaReservasAulas implements IVistaReservasAulas {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see org.iesalandalus.programacion.reservasaulas.vista.IVistaReservasAulas#consultarDisponibilidad()
-	 */
 	@Override
 	public void consultarDisponibilidad() {
 		if (Controlador.consultarDisponibilidad(Consola.leerAula(),
