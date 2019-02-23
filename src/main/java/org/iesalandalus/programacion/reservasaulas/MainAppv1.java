@@ -1,14 +1,15 @@
 package org.iesalandalus.programacion.reservasaulas;
 
 import org.iesalandalus.programacion.reservasaulas.vista.Consola;
-import org.iesalandalus.programacion.reservasaulas.vista.IUTextual;
+import org.iesalandalus.programacion.reservasaulas.vista.IVistaReservasAulas;
+import org.iesalandalus.programacion.reservasaulas.vista.VistaReservasAulas;
 
-public class MainApp {
+public class MainAppv1 {
 
 	public static void main(String[] args) {
 		System.out.println("Programa para la gestión de reservas de espacios del IES Al-Ándalus");
 		Consola.mostrarCabecera("Realizado por Alejandro Gázquez Monedero");
-		IUTextual vista = new IUTextual();
+		IVistaReservasAulas vista = new VistaReservasAulas();
 		vista.comenzar();
 	}
 

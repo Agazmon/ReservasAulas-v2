@@ -1,13 +1,14 @@
 package org.iesalandalus.programacion.reservasaulas.vista;
 
-import java.text.DateFormat;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-
-import javax.naming.OperationNotSupportedException;
 
 import org.iesalandalus.programacion.reservasaulas.modelo.dominio.Aula;
 import org.iesalandalus.programacion.reservasaulas.modelo.dominio.Profesor;
+import org.iesalandalus.programacion.reservasaulas.modelo.dominio.permanencia.Permanencia;
+import org.iesalandalus.programacion.reservasaulas.modelo.dominio.permanencia.PermanenciaPorHora;
+import org.iesalandalus.programacion.reservasaulas.modelo.dominio.permanencia.PermanenciaPorTramo;
 import org.iesalandalus.programacion.reservasaulas.modelo.dominio.permanencia.Tramo;
 import org.iesalandalus.programacion.utilidades.Entrada;
 
@@ -42,7 +43,10 @@ public class Consola {
 
 	public static Aula leerAula() {
 		System.out.print("Introduce el nombre del Aula: ");
-		return new Aula(Entrada.cadena());
+		String nombre = Entrada.cadena();
+		System.out.print("Introduce la capacidad del Aula: ");
+		int capacidad = Entrada.entero();
+		return new Aula(nombre, capacidad);
 	}
 
 	public static String leerNombreAula() {
@@ -63,9 +67,13 @@ public class Consola {
 		System.out.print("Introduce el telefono de el Profesor o Profesora (No obligatorio): ");
 		telefono = Entrada.cadena();
 		if (telefono.trim().equals("")) {
-			return new Profesor(nombre, correo);
+			Profesor profesor= new Profesor(nombre, correo);
+			System.out.println(profesor);
+			return new Profesor(profesor) ;
 		} else {
-			return new Profesor(nombre, correo, telefono);
+			Profesor profesor = new Profesor(nombre, correo, telefono);
+			System.out.println(profesor);
+			return new Profesor(profesor);
 		}
 	}
 
@@ -92,8 +100,7 @@ public class Consola {
 
 	}
 
-	public static LocalDate leerDia() {
-		LocalDate diaLeido;
+	public static String leerDia() {
 		int dia, mes, anio;
 		do {
 			System.out.print("Introduce el dia: ");
@@ -104,6 +111,30 @@ public class Consola {
 			anio = Entrada.entero();
 			;
 		} while (LocalDate.of(anio, mes, dia).isBefore(LocalDate.now()));
-		return diaLeido = LocalDate.of(anio, mes, dia);
+		return LocalDate.of(anio, mes, dia).format(FORMATO_DIA);
+	}
+	public static LocalTime leerHora() {
+		int hora, minutos;
+		minutos = 00;
+		do {
+			System.out.println("Introduce una hora entre las 8 y las 22, la reserva se hará a en punto.");
+			hora = Entrada.entero();
+		} while (hora<8 || hora>22);
+		return LocalTime.of(hora, minutos);
+	}
+	public static Permanencia leerPermanencia() {
+		if(elegirPermanencia()==1) {
+			return (Permanencia) new PermanenciaPorTramo(leerDia(), leerTramo());
+		} else {
+			return (Permanencia) new PermanenciaPorHora(leerDia(), leerHora());
+		}
+	}
+	public static int elegirPermanencia() {
+		int eleccion=0;
+		do {
+			System.out.println("Elige el tipo de permanencia, 1=Por Tramo ; 2=Por Hora");
+			eleccion=Entrada.entero();
+		} while (eleccion>2|eleccion<1);
+		return eleccion;
 	}
 }
