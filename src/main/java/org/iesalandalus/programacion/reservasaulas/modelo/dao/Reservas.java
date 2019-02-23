@@ -59,17 +59,23 @@ public class Reservas {
 		if(getPuntosGastadosReserva(reserva)>MAX_PUNTOS_PROFESOR_MES) {
 			throw new OperationNotSupportedException("Esta reserva excede los puntos máximos por mes para dicho profesor.");
 		}
-		if (this.coleccionReservas.contains(reserva)) {
+		if (coleccionReservas.contains(reserva)) {
 			throw new OperationNotSupportedException("La reserva ya existe.");
 		} else {
 			if (getReservaDia(reserva.getPermanencia().getDia())==null) {
+				if(consultarDisponibilidad(reserva.getAula(), reserva.getPermanencia())){
 					coleccionReservas.add(new Reserva(reserva));
+				}
 			} else{
 				if (getReservaDia(reserva.getPermanencia().getDia()).getPermanencia() instanceof PermanenciaPorTramo & reserva.getPermanencia() instanceof PermanenciaPorTramo) {
+					if(consultarDisponibilidad(reserva.getAula(), reserva.getPermanencia())){
 						coleccionReservas.add(new Reserva(reserva));
+					}
 				} else {
 					if (getReservaDia(reserva.getPermanencia().getDia()).getPermanencia() instanceof PermanenciaPorHora & reserva.getPermanencia() instanceof PermanenciaPorHora) {
+						if(consultarDisponibilidad(reserva.getAula(), reserva.getPermanencia())){
 							coleccionReservas.add(new Reserva(reserva));
+						}
 					} else {
 						if (getReservaDia(reserva.getPermanencia().getDia()).getPermanencia() instanceof PermanenciaPorHora) {
 							throw new OperationNotSupportedException("Ya se ha realizado una reserva por hora para este día y aula.");
@@ -92,10 +98,14 @@ public class Reservas {
 
 	private float getPuntosGastadosReserva(Reserva reserva) {
 		float totalPuntos = 0;
+		if (getReservasProfesorMes(reserva.getProfesor(),reserva.getPermanencia().getDia())==null){
+			return reserva.getPuntos();
+		} else {
 		for (Reserva puntosReservas : getReservasProfesorMes(reserva.getProfesor(),reserva.getPermanencia().getDia())){
 			totalPuntos+=puntosReservas.getPuntos();
 		}
 		return totalPuntos+reserva.getPuntos();
+		}
 	}
 
 	private List<Reserva> getReservasProfesorMes(Profesor profesor, LocalDate fecha) {
@@ -189,8 +199,8 @@ public class Reservas {
 			Reserva reservaConsulta = new Reserva(profesorConsulta, aula, permanencia);
 			if (coleccionReservas.contains(reservaConsulta)) {
 			for (Reserva reserva : coleccionReservas) {
-				if((reserva.getPermanencia() instanceof PermanenciaPorHora & getReservaDia(permanencia.getDia()).getPermanencia() instanceof PermanenciaPorHora) || (reserva.getPermanencia() instanceof PermanenciaPorTramo & getReservaDia(permanencia.getDia()).getPermanencia() instanceof PermanenciaPorTramo)) {
-					if (reserva.equals(reservaConsulta)) {
+				if((getReservaDia(reserva.getPermanencia().getDia()).getPermanencia() instanceof PermanenciaPorTramo & reserva.getPermanencia() instanceof PermanenciaPorTramo)|| (getReservaDia(reserva.getPermanencia().getDia()).getPermanencia() instanceof PermanenciaPorHora & reserva.getPermanencia() instanceof PermanenciaPorHora)) {
+					if (reserva.getPermanencia().equals(reservaConsulta.getPermanencia())) {
 						return false;
 					}
 				}

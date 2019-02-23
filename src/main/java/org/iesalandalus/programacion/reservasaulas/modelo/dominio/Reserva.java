@@ -89,8 +89,7 @@ public class Reserva {
 			return false;
 		}
 		Reserva other = (Reserva) obj;
-		return Objects.equals(aula, other.aula) && Objects.equals(permanencia, other.permanencia)
-				&& Objects.equals(profesor, other.profesor);
+		return Objects.equals(aula, other.aula) && Objects.equals(permanencia, other.permanencia);
 	}
 
 	@Override

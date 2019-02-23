@@ -46,24 +46,38 @@ public class PermanenciaPorTramo extends Permanencia {
 		return PUNTOS;
 	}
 
+	
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(tramo);
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((tramo == null) ? 0 : tramo.hashCode());
+		return result;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj) {
+		if (this == obj)
 			return true;
-		}
-		if (obj == null) {
+		if (obj == null)
 			return false;
-		}
-		if (!(obj instanceof PermanenciaPorTramo)) {
+		if (!(obj instanceof PermanenciaPorTramo))
 			return false;
-		}
 		PermanenciaPorTramo other = (PermanenciaPorTramo) obj;
-		return tramo == other.tramo;
+		if (tramo == null) {
+			if (other.tramo != null)
+				return false;
+		} else if (!tramo.equals(other.tramo)) {
+			return false;
+		}
+		Permanencia other2 = (Permanencia) obj;
+		if (dia == null) {
+			if (other2.dia != null)
+				return false;
+		} else if (!dia.equals(other2.dia))
+			return false;
+		return true;
 	}
 
 	@Override
