@@ -51,11 +51,12 @@ public abstract class Permanencia {
 	}
 
 	public abstract int getPuntos();
-
+	
+	@Override
 	public abstract String toString();
-
+	@Override
 	public abstract int hashCode();
-
+	@Override
 	public abstract boolean equals(Object obj);
 
 }

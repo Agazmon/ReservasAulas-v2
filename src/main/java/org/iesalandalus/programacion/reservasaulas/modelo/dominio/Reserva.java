@@ -52,26 +52,26 @@ public class Reserva {
 		if (permanencia == null) {
 			throw new IllegalArgumentException("La reserva se debe hacer para una permanencia concreta.");
 		} else {
-			if(permanencia instanceof PermanenciaPorTramo) {
-				this.permanencia = new PermanenciaPorTramo((PermanenciaPorTramo)permanencia);
-			} else if (permanencia instanceof PermanenciaPorHora) {
-				this.permanencia = new PermanenciaPorHora((PermanenciaPorHora)permanencia);
+			if (permanencia instanceof PermanenciaPorTramo) {
+				this.permanencia = new PermanenciaPorTramo((PermanenciaPorTramo) permanencia);
+			} else {
+				this.permanencia = new PermanenciaPorHora((PermanenciaPorHora) permanencia);
 			}
 		}
 	}
 
 	public Permanencia getPermanencia() {
 		if (this.permanencia instanceof PermanenciaPorTramo) {
-			return new PermanenciaPorTramo((PermanenciaPorTramo)permanencia);
+			return new PermanenciaPorTramo((PermanenciaPorTramo) permanencia);
 		} else {
-			return new PermanenciaPorHora((PermanenciaPorHora)permanencia);
+			return new PermanenciaPorHora((PermanenciaPorHora) permanencia);
 		}
 	}
-	
+
 	public float getPuntos() {
-		return permanencia.getPuntos()+aula.getPuntos();
+		return permanencia.getPuntos() + aula.getPuntos();
 	}
-	
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(aula, permanencia, profesor);
@@ -95,7 +95,8 @@ public class Reserva {
 
 	@Override
 	public String toString() {
-		return String.format("[profesor=%s, aula=%s, permanencia=%s, puntos=%s]", profesor, aula, permanencia, getPuntos());
+		return String.format("[profesor=%s, aula=%s, permanencia=%s, puntos=%s]", profesor, aula, permanencia,
+				getPuntos());
 	}
 
 }
